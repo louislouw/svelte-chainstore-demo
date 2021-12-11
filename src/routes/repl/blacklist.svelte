@@ -12,9 +12,7 @@
 		.sync() //Write modified data into store at this point in the chain
 		.store({ instructions: 'Click button to assign user data' });
 
-	function prettyJson(val) {
-		return JSON.stringify(val, null, 2);
-	}
+	const prettyJson = (val) => JSON.stringify(val, null, 2);
 </script>
 
 <div>Initial User</div>
