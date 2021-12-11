@@ -16,6 +16,11 @@
 			url: 'https://svelte.dev/repl/todo?version=3.44.2'
 		},
 		{
+			name: 'validate',
+			path: '/repl/validate',
+			url: 'https://svelte.dev/repl/todo?version=3.44.2'
+		},
+		{
 			name: 'blacklist',
 			path: '/repl/blacklist',
 			url: 'https://svelte.dev/repl/todo?version=3.44.2'
@@ -46,8 +51,8 @@
 			url: 'https://svelte.dev/repl/todo?version=3.44.2'
 		},
 		{
-			name: 'validate',
-			path: '/repl/validate',
+			name: 'casefold',
+			path: '/repl/casefold',
 			url: 'https://svelte.dev/repl/todo?version=3.44.2'
 		}
 	];

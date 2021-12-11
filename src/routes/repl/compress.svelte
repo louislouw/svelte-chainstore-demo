@@ -7,8 +7,6 @@
 	let isREPL = true;
 	let user;
 
-	console.log('LZString', LZString);
-
 	onMount(() => {
 		/**
 		 * Note:
