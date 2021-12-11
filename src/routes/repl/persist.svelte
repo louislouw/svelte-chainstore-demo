@@ -2,6 +2,7 @@
 	import { onMount } from 'svelte';
 	import { chain, jsonChainLink, storageChainLink } from 'svelte-chainstore';
 
+	const storageKey = 'chainUser';
 	let isREPL = true;
 	let user;
 
@@ -13,7 +14,7 @@
 		 * 3. window.localStorage only available at mount, so we can only create during this lifecycle phase.
 		 */
 
-		user = chain(jsonChainLink()).chain(storageChainLink('chainUser', replStorageCheck())).store({
+		user = chain(jsonChainLink()).chain(storageChainLink(storageKey, replStorageCheck())).store({
 			name: 'John',
 			age: 18
 		});
