@@ -74,7 +74,7 @@
 	</div>
 	<div>
 		Age:<br />
-		<input bind:value={$user.age} placeholder="Age" />
+		<input bind:value={$user.age} type="number" min="0" max="150" placeholder="Age" />
 	</div>
 	<div>
 		Change the details and then refresh. It should load the page with your saved user details.
