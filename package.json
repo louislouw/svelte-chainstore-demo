@@ -1,6 +1,6 @@
 {
   "name": "svelte-repl-storagemock",
-  "version": "0.0.2",
+  "version": "0.0.4",
   "description": "Provides a mock storage solution for REPL when access to window.localStorage is sandboxed.",
   "scripts": {
     "dev": "svelte-kit dev",

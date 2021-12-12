@@ -1,12 +1,22 @@
 <script>
-	export let storageAllowed = false;
+	export let show = false;
 </script>
 
-{#if !storageAllowed}
-	<h1>⚠️REPL STORAGE NOTICE</h1>
-	<p>
-		REPL blocks access to window.localStorage due to security concerns.<br />
-		This example will use an emulated storage instance that <b>will not persist data</b> between page
-		refreshes.
-	</p>
+{#if show}
+	<div class="notice">
+		⚠️ REPL blocks access to window.localStorage due to security concerns.<br />
+		This example will use an emulated storage instance that <b>will not persist data</b> between reloads.
+	</div>
 {/if}
+
+<style>
+	.notice {
+		display: inline-block;
+		background: rgb(240, 234, 147);
+		padding: 15px;
+		border-radius: 5px;
+		border: 2px dashed #bbb;
+		margin: 15px 5px;
+		text-align: center;
+	}
+</style>
