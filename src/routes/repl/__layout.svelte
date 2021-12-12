@@ -41,11 +41,6 @@
 			url: 'https://svelte.dev/repl/todo?version=3.44.2'
 		},
 		{
-			name: 'dirty',
-			path: '/repl/dirty',
-			url: 'https://svelte.dev/repl/todo?version=3.44.2'
-		},
-		{
 			name: 'defaults',
 			path: '/repl/defaults',
 			url: 'https://svelte.dev/repl/todo?version=3.44.2'
@@ -53,6 +48,16 @@
 		{
 			name: 'casefold',
 			path: '/repl/casefold',
+			url: 'https://svelte.dev/repl/todo?version=3.44.2'
+		},
+		{
+			name: 'dirtyStore',
+			path: '/repl/dirty',
+			url: 'https://svelte.dev/repl/todo?version=3.44.2'
+		},
+		{
+			name: 'busyStore',
+			path: '/repl/busy',
 			url: 'https://svelte.dev/repl/todo?version=3.44.2'
 		}
 	];

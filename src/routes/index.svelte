@@ -1,8 +1,6 @@
 <script lang="ts">
-	import { chain } from 'svelte-chainstore';
+	import { goto } from '$app/navigation';
+	import { onMount } from 'svelte';
 
-	const counter = chain((v: number) => ++v).store(0);
+	onMount(() => goto('/repl'));
 </script>
-
-<h1>Welcome to SvelteKit {$counter}</h1>
-<p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
