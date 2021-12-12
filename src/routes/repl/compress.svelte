@@ -5,11 +5,11 @@
 	import { storageAllowed, storageMock, StorageNotice } from 'svelte-repl-storagemock';
 
 	const storageKey = 'compressedChainPoem';
-	let replEnv = true;
 	let user;
 	let uncompressedSize = 0;
 	let compressedSize = 0;
 	let saving = '0.0';
+	let replEnv = true;
 
 	onMount(() => {
 		/**

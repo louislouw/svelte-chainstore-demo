@@ -1,6 +1,7 @@
 <script>
 	import { onMount } from 'svelte';
 	import { chain, defaultsChainLink, jsonChainLink, storageChainLink } from 'svelte-chainstore';
+	import { storageAllowed, storageMock, StorageNotice } from 'svelte-repl-storagemock';
 
 	const defaultEditorSettings = {
 		theme: 'dark',
@@ -9,9 +10,9 @@
 	};
 
 	const storageKey = 'chainEditorSettings';
-	let isREPL = true;
 	let editorSettings;
 	let storedEditorSettingsJSON;
+	let replEnv = true;
 
 	onMount(() => {
 		/**
@@ -21,56 +22,19 @@
 		 * 3. window.localStorage only available at mount, so we can only create during this lifecycle phase.
 		 */
 
+		replEnv = !storageAllowed(); //If storage is not allowed, we assume we are running on REPL
+		const storage = replEnv ? storageMock() : window.localStorage;
 		editorSettings = chain(defaultsChainLink(defaultEditorSettings))
 			.chain(jsonChainLink())
-			.chain(storageChainLink(storageKey, replStorageCheck()))
+			.chain(storageChainLink(storageKey, storage))
 			.chain((v) => (storedEditorSettingsJSON = v))
 			.store({ version: 1, ...defaultEditorSettings }); //Add version in case defaults change in the future
 	});
 
-	function replStorageCheck() {
-		let storage;
-		//Due to security we are not allowed to use storage on REPL
-		//Thus we use a dummy storage mockup
-		//Note: This storage mockup will unfortunately not persist data between browser refreshes
-		try {
-			storage = window.localStorage;
-			isREPL = false;
-		} catch (e) {
-			storage = storageMock();
-		}
-		return storage;
-	}
-
-	const storageMock = () => {
-		let internalStore = {};
-		return {
-			getItem: (key) => internalStore[key],
-			setItem: (key, value) => {
-				internalStore[key] = value;
-			},
-			clear: () => {
-				internalStore = {};
-			},
-			key: (index) => Object.keys(internalStore)[index],
-			removeItem: (key) => {
-				internalStore[key] = null;
-			},
-			length: Object.keys(internalStore).length
-		};
-	};
-
 	const themes = ['light', 'dark', 'classic'];
 </script>
 
-{#if isREPL}
-	<h1>REPL NOTICE</h1>
-	<p>
-		This example will unfortunately not perist data if run on REPL.<br />
-		REPL blocks access to window.localStorage due to security concerns.<br />
-		Thus you will have to run code locally to see it in action.
-	</p>
-{/if}
+<StorageNotice show={replEnv} />
 
 {#if editorSettings}
 	<h1>Editor Settings</h1>
