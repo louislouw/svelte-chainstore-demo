@@ -7,7 +7,7 @@ export function storageAllowed() {
 		const storage = window.localStorage;
 		return true;
 	} catch (e) {
-		console.warn('Access to window.localStorage not available');
+		console.warn('Access to window.localStorage not available. Data will not be persisted.');
 		return false;
 	}
 }
