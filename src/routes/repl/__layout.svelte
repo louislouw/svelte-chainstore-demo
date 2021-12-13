@@ -59,6 +59,11 @@
 			name: 'busyStore',
 			path: '/repl/busy',
 			url: 'https://svelte.dev/repl/todo?version=3.44.2'
+		},
+		{
+			name: 'autoSave',
+			path: '/repl/autosave',
+			url: 'https://svelte.dev/repl/todo?version=3.44.2'
 		}
 	];
 </script>
