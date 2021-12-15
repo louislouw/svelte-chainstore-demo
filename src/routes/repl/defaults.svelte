@@ -26,9 +26,9 @@
 		const storage = replEnv ? storageMock() : window.localStorage;
 		editorSettings = chain(defaultsChainLink(defaultEditorSettings))
 			.chain(jsonChainLink())
-			.chain(storageChainLink(storageKey, storage))
 			.chain((v) => (storedEditorSettingsJSON = v))
-			.store({ version: 1, ...defaultEditorSettings }); //Add version in case defaults change in the future
+			.chain(storageChainLink(storageKey, storage))
+			.store(JSON.stringify({ version: 1, ...defaultEditorSettings })); //Add version in case defaults change in the future
 	});
 
 	const themes = ['light', 'dark', 'classic'];

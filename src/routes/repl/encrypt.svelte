@@ -1,6 +1,6 @@
 <script>
 	import { onMount } from 'svelte';
-	import { chain, jsonChainLink, storageChainLink } from 'svelte-chainstore';
+	import { chain, readDefaultChainLink, jsonChainLink, storageChainLink } from 'svelte-chainstore';
 	import { storageAllowed, storageMock, StorageNotice } from 'svelte-repl-storagemock';
 	import CryptoJS from 'crypto-js';
 
@@ -8,6 +8,11 @@
 	const storageKey = 'encryptedChainUser';
 	let user;
 	let replEnv = true;
+
+	const defaultUser = {
+		name: 'John',
+		age: 18
+	};
 
 	const aesChainLink = (secretKey) => {
 		function writer(value) {
@@ -35,13 +40,11 @@
 
 		replEnv = !storageAllowed(); //If storage is not allowed, we assume we are running on REPL
 		const storage = replEnv ? storageMock() : window.localStorage;
-		user = chain(jsonChainLink())
+		user = chain(readDefaultChainLink(defaultUser))
+			.chain(jsonChainLink())
 			.chain(aesChainLink(secretKey))
 			.chain(storageChainLink(storageKey, storage))
-			.store({
-				name: 'John',
-				age: 18
-			});
+			.store();
 	});
 </script>
 

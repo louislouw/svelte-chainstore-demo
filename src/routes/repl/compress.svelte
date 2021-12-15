@@ -1,6 +1,6 @@
 <script>
 	import { onMount } from 'svelte';
-	import { chain, jsonChainLink, storageChainLink } from 'svelte-chainstore';
+	import { chain, readDefaultChainLink, jsonChainLink, storageChainLink } from 'svelte-chainstore';
 	import LZString from 'lz-string';
 	import { storageAllowed, storageMock, StorageNotice } from 'svelte-repl-storagemock';
 
@@ -10,6 +10,16 @@
 	let compressedSize = 0;
 	let saving = '0.0';
 	let replEnv = true;
+
+	const defaultPoem = {
+		author: 'Edgar Allan',
+		poem: `The Bells by Edgar Allan
+To the swinging and the ringing
+of the bells, bells, bells
+Of the bells, bells, bells, bells
+Bells, bells, bells
+To the rhyming and the chiming of the bells!`
+	};
 
 	onMount(() => {
 		/**
@@ -21,29 +31,30 @@
 
 		replEnv = !storageAllowed(); //If storage is not allowed, we assume we are running on REPL
 		const storage = replEnv ? storageMock() : window.localStorage;
-		user = chain(jsonChainLink())
-			.chain((v) => {
-				uncompressedSize = new Blob([v]).size;
-				return v;
-			})
-			.chain(LZString.compress, LZString.decompress)
+		user = chain(readDefaultChainLink(defaultPoem))
+			.chain(jsonChainLink())
+			.chain(calcUncompressedSize, calcUncompressedSize)
+			.chain(LZString.compress, (v) => (v ? LZString.decompress(v) : v))
+			.chain(calcCompressedSize, calcCompressedSize)
 			.chain(storageChainLink(storageKey, storage))
-			.chain((v) => {
-				compressedSize = new Blob([v]).size;
-				return v;
-			})
-			.store({
-				author: 'Edgar Allan',
-				poem: `The Bells by Edgar Allan
-To the swinging and the ringing
-of the bells, bells, bells
-Of the bells, bells, bells, bells
-Bells, bells, bells
-To the rhyming and the chiming of the bells!`
-			});
+			.store();
 	});
 
-	$: saving = (((uncompressedSize - compressedSize) / uncompressedSize) * 100).toFixed(1);
+	const calcCompressedSize = (v) => {
+		if (v == null) return v;
+		compressedSize = new Blob([v]).size;
+		return v;
+	};
+
+	const calcUncompressedSize = (v) => {
+		if (v == null) return v;
+		uncompressedSize = new Blob([v]).size;
+		return v;
+	};
+
+	$: saving = uncompressedSize
+		? (((uncompressedSize - compressedSize) / uncompressedSize) * 100).toFixed(1)
+		: '0.0';
 </script>
 
 <StorageNotice show={replEnv} />

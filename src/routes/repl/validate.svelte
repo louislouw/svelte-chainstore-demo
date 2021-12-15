@@ -8,18 +8,22 @@
 			presence: { allowEmpty: false }
 		},
 		email: {
+			presence: { allowEmpty: false },
 			email: true
 		}
 	};
 
 	let validatorErrors;
-	const user = chain((v) => {
+	const validator = (v) => {
 		validatorErrors = validate(v, constraints);
 		return v;
-	}).store({ name: '', email: '' });
+	};
+
+	const user = chain(validator).store({ name: '', email: '' });
 	//Note: These is no sync() as only need to listen for changes in store
 
 	function submitForm() {
+		if (!validatorErrors) validator($user);
 		if (!validatorErrors) alert('No validation errors detected');
 	}
 </script>

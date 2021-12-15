@@ -3,10 +3,15 @@
 	import { chain, jsonChainLink, dirtyStore, storageChainLink } from 'svelte-chainstore';
 	import { storageAllowed, storageMock, StorageNotice } from 'svelte-repl-storagemock';
 
-	const storageKey = 'chainUser';
+	const storageKey = 'chainUser1';
 	const dirty = dirtyStore();
 	let user;
 	let replEnv = true;
+
+	const defaultUser = {
+		name: 'John',
+		age: 18
+	};
 
 	onMount(() => {
 		/**
@@ -21,10 +26,7 @@
 		user = chain(jsonChainLink())
 			.chain(dirty.chainLink)
 			.chain(storageChainLink(storageKey, storage))
-			.store({
-				name: 'John',
-				age: 18
-			});
+			.store(JSON.stringify(defaultUser));
 	});
 </script>
 
