@@ -12,20 +12,15 @@ export function storageAllowed() {
 	}
 }
 
-export const storageMock = () => {
-	let internalStore = {};
+export const storageMock = (): Storage => {
+	let internalStore: any = {};
+
 	return {
-		getItem: (key) => internalStore[key],
-		setItem: (key, value) => {
-			internalStore[key] = value;
-		},
-		clear: () => {
-			internalStore = {};
-		},
-		key: (index) => Object.keys(internalStore)[index],
-		removeItem: (key) => {
-			internalStore[key] = null;
-		},
+		getItem: (key: string): string | null => key in internalStore ? internalStore[key] : null,
+		setItem: (key: string, value: string): void => { internalStore[key] = value },
+		clear: () => { internalStore = {} },
+		key: (index: number): string | null => Object.keys(internalStore)[index],
+		removeItem: (key: string) => delete internalStore[key],
 		length: Object.keys(internalStore).length
-	};
-};
+	}
+}
