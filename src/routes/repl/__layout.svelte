@@ -6,6 +6,11 @@
 			url: 'https://svelte.dev/repl/ddc1d945360d4ea880165916c7f123d9?version=3.44.2'
 		},
 		{
+			name: 'persistStore',
+			path: '/repl/persistStore',
+			url: 'https://svelte.dev/repl/todo?version=3.44.2'
+		},
+		{
 			name: 'compress',
 			path: '/repl/compress',
 			url: 'https://svelte.dev/repl/todo?version=3.44.2'
