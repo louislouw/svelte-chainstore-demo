@@ -1,14 +1,14 @@
-<script lang="ts">
+<script>
 	import { busyStore } from 'svelte-chainstore';
 	import { onMount } from 'svelte';
 
 	const busy = busyStore(true); //Start Busy, so we immediately display busy state
 
-	function delay(ms: number): Promise<void> {
+	function delay(ms) {
 		return new Promise((resolve) => setTimeout(resolve, ms));
 	}
 
-	async function runSingle(a: number, b: number) {
+	async function runSingle(a, b) {
 		return busy.run(async () => {
 			await delay(1000);
 			return a + b;
@@ -25,7 +25,7 @@
 		});
 	}
 
-	let photos: [];
+	let photos = [];
 	async function fetchPhotos() {
 		busy.run(async () => {
 			photos = null;
@@ -35,8 +35,8 @@
 		});
 	}
 
-	let promiseForMeaning: Promise<number>;
-	async function calculateMeaningOfLife(): Promise<number> {
+	let promiseForMeaning;
+	async function calculateMeaningOfLife() {
 		await delay(3000);
 		return Promise.resolve(42);
 	}
