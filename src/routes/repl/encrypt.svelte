@@ -2,12 +2,14 @@
 	import { onMount } from 'svelte';
 	import { chain, readDefaultChainLink, jsonChainLink, storageChainLink } from 'svelte-chainstore';
 	import { storageAllowed, storageMock, StorageNotice } from 'svelte-repl-storagemock';
-	import CryptoJS from 'crypto-js';
+	import { AES } from 'crypto-es/lib/aes';
+	import { Utf8 } from 'crypto-es/lib/core';
 
 	const secretKey = 'MySuperSecretKey';
 	const storageKey = 'encryptedChainUser';
 	let user;
 	let replEnv = true;
+	let storedEncryptedString;
 
 	const defaultUser = {
 		name: 'John',
@@ -16,13 +18,13 @@
 
 	const aesChainLink = (secretKey) => {
 		function writer(value) {
-			return CryptoJS.AES.encrypt(value, secretKey).toString();
+			return AES.encrypt(value, secretKey).toString();
 		}
 
 		function reader(value) {
 			if (!value) return null;
-			const decrypted = CryptoJS.AES.decrypt(value, secretKey);
-			return decrypted ? decrypted.toString(CryptoJS.enc.Utf8) : null;
+			const decrypted = AES.decrypt(value, secretKey);
+			return decrypted ? decrypted.toString(Utf8) : null;
 		}
 		return {
 			writer,
@@ -43,9 +45,12 @@
 		user = chain(readDefaultChainLink(defaultUser))
 			.chain(jsonChainLink())
 			.chain(aesChainLink(secretKey))
+			.chain(encryptedData, encryptedData) //Intercept encrypted data in chain for display
 			.chain(storageChainLink(storageKey, storage))
 			.store();
 	});
+
+	const encryptedData = (v) => (storedEncryptedString = v);
 </script>
 
 <StorageNotice show={replEnv} />
@@ -60,7 +65,8 @@
 		Age:<br />
 		<input bind:value={$user.age} type="number" min="0" max="150" placeholder="Age" />
 	</div>
-	<div>
-		Change the details and then refresh. It should load the page with your saved user details.
-	</div>
 {/if}
+<h2>Stored Encrypted String</h2>
+<pre>
+	{storedEncryptedString}
+</pre>
