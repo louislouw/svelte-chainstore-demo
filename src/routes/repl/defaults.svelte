@@ -1,6 +1,12 @@
 <script>
 	import { onMount } from 'svelte';
-	import { chain, defaultsChainLink, jsonChainLink, storageChainLink } from 'svelte-chainstore';
+	import {
+		chain,
+		readDefaultChainLink,
+		defaultsChainLink,
+		jsonChainLink,
+		storageChainLink
+	} from 'svelte-chainstore';
 	import { storageAllowed, storageMock, StorageNotice } from 'svelte-repl-storagemock';
 
 	const defaultEditorSettings = {
@@ -25,12 +31,14 @@
 		replEnv = !storageAllowed(); //If storage is not allowed, we assume we are running on REPL
 		const storage = replEnv ? storageMock() : window.localStorage;
 		editorSettings = chain(defaultsChainLink(defaultEditorSettings))
+			.chain(readDefaultChainLink({ version: 1, ...defaultEditorSettings })) //Add version in case defaults change in the future
 			.chain(jsonChainLink())
-			.chain((v) => (storedEditorSettingsJSON = v))
+			.chain(jsonData, jsonData) //Intercept JSON data in chain for display
 			.chain(storageChainLink(storageKey, storage))
-			.store(JSON.stringify({ version: 1, ...defaultEditorSettings })); //Add version in case defaults change in the future
+			.store();
 	});
 
+	const jsonData = (v) => (storedEditorSettingsJSON = v);
 	const themes = ['light', 'dark', 'classic'];
 </script>
 
