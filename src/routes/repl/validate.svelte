@@ -1,6 +1,6 @@
 <script>
 	import { chain } from 'svelte-chainstore';
-	import { validate } from 'validate.js';
+	import { default as validate } from 'validate.js';
 
 	//Validation using https://validatejs.org/
 	const constraints = {
@@ -13,9 +13,9 @@
 		}
 	};
 
-	let validatorErrors;
+	let validationErrors;
 	const validator = (v) => {
-		validatorErrors = validate(v, constraints);
+		validationErrors = validate(v, constraints);
 		return v;
 	};
 
@@ -23,8 +23,8 @@
 	//Note: These is no sync() as only need to listen for changes in store
 
 	function submitForm() {
-		if (!validatorErrors) validator($user);
-		if (!validatorErrors) alert('No validation errors detected');
+		if (!validationErrors) validator($user);
+		if (!validationErrors) alert('No validation errors detected');
 	}
 </script>
 
@@ -32,21 +32,21 @@
 
 <div>
 	Name:<br />
-	<input bind:value={$user.name} class:error={validatorErrors?.name} />
+	<input bind:value={$user.name} class:error={validationErrors?.name} />
 </div>
 
 <div>
 	Email:<br />
-	<input bind:value={$user.email} class:error={validatorErrors?.email} />
+	<input bind:value={$user.email} class:error={validationErrors?.email} />
 </div>
 <div>
-	<button on:click={submitForm} disabled={validatorErrors}>Next</button>
+	<button on:click={submitForm} disabled={validationErrors}>Next</button>
 </div>
 
-{#if validatorErrors}
+{#if validationErrors}
 	<h2>Validation Errors</h2>
 	<pre>
-		{JSON.stringify(validatorErrors, null, 2)}
+		{JSON.stringify(validationErrors, null, 2)}
 	</pre>
 {/if}
 
